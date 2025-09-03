@@ -261,5 +261,5 @@ exit
 
 ## References
 
-- [Kubectl commands (Official Docs)](https://kubernetes.io/docs/reference/generated/kubectl/)kubectl-commands#-strong-getting-started-strong-
+- [Kubectl commands (Official Docs)](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
 - [Kubernetes Overview (Official Docs)](https://kubernetes.io/docs/concepts/overview/)
