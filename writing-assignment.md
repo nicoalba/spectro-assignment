@@ -32,7 +32,7 @@ When debugging, we recommend this workflow:
 
 ## `kubectl get pods`
 
-Use this command to get a list of pods in a given [namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/). It lists their status, health, and age. This command is typically the first one executed for pod health checks.
+Use this command to get a list of pods in a given [namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/). It lists their status, health, and age. Run this command first to check pod health.
 
 The command executes against your current context's namespace unless you specify a namespace with `--namespace` (or, simply `-n`):
 
@@ -65,11 +65,11 @@ webapp-deployment-559d86b864-sk7r9         0/1     CrashLoopBackOff   4         
 - `RESTARTS`: How many times the containers in the pod have restarted
 - `AGE`: The amount of time elapsed since creation of the pod
 
-For more info, available flags, and example commands, see [`get` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get).
+For more info, available flags, and example commands, refer to [`get` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get).
 
 ## `kubectl describe pod`
 
-Use this command to get a detailed, human-readable view of a specific pod or a set of pods in a K8s cluster. While `kubectl get pods` offers a summary, `describe` gathers information from multiple API endpoints to present a comprehensive snapshot of a pod's current state and configuration. It is an essential tool for troubleshooting pod-related issues.
+Use this command to get a detailed, human-readable view of a specific pod or a set of pods in a K8s cluster. While `kubectl get pods` gives a summary, `describe` pulls details from multiple sources to show the pod's full state and setup. It is an essential tool for troubleshooting pod-related issues.
 
 ### Example output and explanation
 
@@ -111,7 +111,7 @@ The image can't be pulled. Verify:
 - Network/DNS to the registry
 - If private registry via Palette, ensure the pack/secret is applied to this cluster/namespace
 
-For more info, available flags, and example commands, see [`describe` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#describe).
+For more info, available flags, and example commands, refer to [`describe` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#describe).
 
 
 ## `kubectl logs`
@@ -138,7 +138,7 @@ The logs show the raw output of what your application is doing inside the contai
 - Startup and system messages: Initialization messages, system and informational output, warnings and errors
 - Runtime logs: Application-specific data, error stack traces and exceptions, debugging output
 
-For more info, available flags, and example commands, see [`logs` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs).
+For more info, available flags, and example commands, refer to [`logs` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs).
 
 ## `kubectl exec`
 
@@ -159,7 +159,7 @@ ff02::2 ip6-allrouters
 
 The output depends on the command you execute once you enter the interactive session.
 
-For more info, available flags, and example commands, see [`exec` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#exec).
+For more info, available flags, and example commands, refer to [`exec` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#exec).
 
 ## `kubectl debug`
 
@@ -187,7 +187,7 @@ dr-xr-xr-x 8 root root 0 Sep  3 15:00 attr
 exit
 ```
 
-For more information, see [kubectl debug](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#debug).
+For more information, refer to [kubectl debug](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#debug).
 
 ## References
 
