@@ -1,8 +1,8 @@
 # Debug Operations in Kubernetes
 
-`kubectl` is the command-line interface (CLI) tool used to interact with and manage Kubernetes (K8s) clusters. With `kubectl`, you can commmunicate with the K8s API server and execute commands against a K8s cluster to deploy applications, manage resources, or view logs.
+`kubectl` is the command-line interface (CLI) tool used to interact with and manage Kubernetes (K8s) clusters. With `kubectl`, you can communicate with the K8s API server and execute commands against a K8s cluster to deploy applications, manage resources, or view logs.
 
-`kubectl` is also an essential tool for dianogosing and debugging issues with your applications. With `kubectl`, you can access and investigate pod status, configurations, and container logs. For advanced users, you can even attach temporary debugging containers to running workloads.
+`kubectl` is also an essential tool for diagnosing and debugging issues with your applications. With `kubectl`, you can access and investigate pod status, configurations, and container logs. For advanced users, you can even attach temporary debugging containers to running workloads.
 
 This guide outlines the most common `kubectl` commands and a recommended workflow for effective troubleshooting.
 
@@ -27,17 +27,26 @@ When debugging, we recommend this workflow:
 1. `kubectl get pods`: Gives you an inventory of the pods in your K8s cluster.
 2. `kubectl describe pod`: Gives you a snapshot of a specific pod's current state and configuration.
 3. `kubectl logs`: Gives you the standard output (`stdout`) and standard error (`stderr`) streams from a container running a pod.
-4. `kubectl exec`: Lets you execute a command directly inside a running container with a K8s pod.
-5. `kubetl debug`: Creates a temporary debug container to a running pod for advanced troubleshooting when `exec` is insufficient.
+4. `kubectl exec`: Lets you execute a command directly inside a running container in a pod.
+5. `kubectl debug`: Creates a temporary debug container to a running pod for advanced troubleshooting when `exec` is insufficient.
 
 ## `kubectl get pods`
 
-Use this command to get a list of all available pods in a given [namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/). It lists their status, health, and age. This command is typically the first one executed for pod health checks.
+Use this command to get a list of pods in a given [namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/). It lists their status, health, and age. This command is typically the first one executed for pod health checks.
 
-The command executes against your current context's namespace unless you specify a namespace with `--namespace`:
+The command executes against your current context's namespace unless you specify a namespace with `--namespace` (or, simply `-n`):
 
 ```shell
-kubectl get pods --namespace
+kubectl get pods                    # current namespace
+kubectl get pods -n <namespace>     # specific namespace
+kubectl get pods -A                 # all namespaces
+kubectl get pods -o wide            # include IP, NODE, etc.
+```
+
+To set a working namespace, so you don't need to repeat it everywhere:
+
+```shell
+kubectl config set-context --current --namespace <namespace>
 ```
 
 ### Example output and explanation
@@ -52,7 +61,7 @@ webapp-deployment-559d86b864-sk7r9         0/1     CrashLoopBackOff   4         
 
 - `NAME`: The name of the pod
 - `READY`: The number of ready containers / the number of total containers
-- `STATUS`: Current state of the pod: `Running`, `Pending`, `Succeeded`, `Failed`, or `CrashLoopBadOff`
+- `STATUS`: Current state of the pod: `Running`, `Pending`, `Succeeded`, `Failed`, or `CrashLoopBackOff`
 - `RESTARTS`: How many times the containers in the pod have restarted
 - `AGE`: The amount of time elapsed since creation of the pod
 
@@ -111,7 +120,7 @@ For each container in the pod, this output lists:
   - State: The current state of the container
   - Ready: If the container is ready to serve traffic
   - Restart count: How many times the container has been restarted
-  - Resource requests/limits: CPU and memory reources requested and limited for the container
+  - Resource requests/limits: CPU and memory resources requested and limited for the container
 - Volumes:
   - ConfigMaps, Secrets, Persistent Volumes
 - Events:
