@@ -9,15 +9,10 @@ This guide outlines the most common `kubectl` commands and a recommended workflo
 - [Debug Operations in Kubernetes](#debug-operations-in-kubernetes)
   - [Recommended Debugging Workflow](#recommended-debugging-workflow)
   - [`kubectl get pods`](#kubectl-get-pods)
-    - [Flags for `kubectl get pods`](#flags-for-kubectl-get-pods)
   - [`kubectl describe pod`](#kubectl-describe-pod)
-    - [Flags for `kubectl describe pod`](#flags-for-kubectl-describe-pod)
   - [`kubectl logs`](#kubectl-logs)
-    - [Flags for `kubectl logs`](#flags-for-kubectl-logs)
   - [`kubectl exec`](#kubectl-exec)
-    - [Flags for `kubectl exec`](#flags-for-kubectl-exec)
   - [`kubectl debug`](#kubectl-debug)
-    - [Flags for `kubectl debug`](#flags-for-kubectl-debug)
   - [References](#references)
 
 ## Recommended Debugging Workflow
@@ -60,20 +55,7 @@ Output explanation:
 - `RESTARTS`: How many times the containers in the pod have restarted.
 - `AGE`: The amount of time elapsed since creation of the pod.
 
-### Flags for `kubectl get pods`
-
-| Flag               | Short form | Description                                                                                   | Example                                                  |
-| ------------------ | ---------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `--namespace`      | `-n`       | Specifies a particular namespace to search for pods.                                          | `kubectl get pods -n kube-system`                        |
-| `--all-namespaces` | `-A`       | Lists pods across all namespaces in the cluster.                                              | `kubectl get pods -A`                                    |
-| `--output=wide`    | `-o wide`  | Adds extra columns to the output, such as the pod's IP address and the node it is running on. | `kubectl get pods -o wide`                               |
-| `--selector`       | `-l`       | Filters pods based on a specified label.                                                      | `kubectl get pods -l app=nginx`                          |
-| `--watch`          | `-w`       | Watches for changes and continuously streams updates to the terminal.                         | `kubectl get pods -w`                                    |
-| `--field-selector` |            | Filters pods based on one or more field selectors.                                            | `kubectl get pods --field-selector=status.phase=Failed`  |
-| `--sort-by`        |            | Sorts the list of pods based on a specified JSONPath expression.                              | `kubectl get pods --sort-by=.metadata.creationTimestamp` |
-| `--show-labels`    |            | Adds an extra column that shows the labels for each pod.                                      | `kubectl get pods --show-labels`                         |
-| `--output`         | `-o`       | Specifies an output format other than the default table (e.g., `yaml`, `json`).               | `kubectl get pods -o yaml`                               |
-
+For more info, available flags, and example commands, see [`get` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get).
 
 ## `kubectl describe pod`
 
@@ -137,14 +119,7 @@ For each container in the pod, this output lists important information:
   - Normal events
   - Warning events
 
-### Flags for `kubectl describe pod`
-
-| Flag               | Short form | Description                                            | Example                                       |
-| ------------------ | ---------- | ------------------------------------------------------ | --------------------------------------------- |
-| `--namespace`      | `-n`       | Specifies the namespace of the pod(s) to describe.     | `kubectl describe pod my-pod -n my-namespace` |
-| `--filename`       | `-f`       | Describes resource(s) from a local manifest file.      | `kubectl describe -f my-pod.yaml`             |
-| `--selector`       | `-l`       | Describes all pods matching a specific label selector. | `kubectl describe pods -l app=nginx`          |
-| `--all-namespaces` | `-A`       | Describes pods across all namespaces in the cluster.   | `kubectl describe pods -A`                    |
+For more info, available flags, and example commands, see [`describe` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#describe).
 
 
 ## `kubectl logs`
@@ -166,26 +141,12 @@ $ kubectl logs frontend-deployment-78b7999885-2sk6j
 10.42.0.1 - - [03/Sep/2025:13:20:50 +0000] "GET / HTTP/1.1" 200 612 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" "-"
 ```
 
-The logs the raw output of what your application is doing inside the container. You'll typically see:
+The logs show the raw output of what your application is doing inside the container. You'll typically see:
 
 - Startup and system messages: Initialization messages, system and informational output, warnings and errors
 - Runtime logs: Application-specific data, error stack traces and exceptions, debugging output
 
-Output explanation:
-
-### Flags for `kubectl logs`
-
-| Flag               | Short form | Description                                                                               | Example                                |
-| ------------------ | ---------- | ----------------------------------------------------------------------------------------- | -------------------------------------- |
-| `--container`      | `-c`       | Specifies a container name in a multi-container pod. Required if a pod has more than one. | `kubectl logs my-pod -c my-container`  |
-| `--follow`         | `-f`       | Streams new log entries to the terminal in real time (like `tail -f`).                    | `kubectl logs -f my-pod`               |
-| `--previous`       | `-p`       | Prints logs for the **previous** instance of the container (useful after restarts).       | `kubectl logs my-pod --previous`       |
-| `--tail`           |            | Displays only the most recent number of log lines.                                        | `kubectl logs my-pod --tail=50`        |
-| `--since`          |            | Shows logs from a relative duration (e.g., `5s`, `2m`, `3h`).                             | `kubectl logs my-pod --since=10m`      |
-| `--timestamps`     |            | Adds a timestamp to each log entry (helps correlate events).                              | `kubectl logs my-pod --timestamps`     |
-| `--all-containers` |            | Prints logs for **all containers** in the pod.                                            | `kubectl logs my-pod --all-containers` |
-| `--selector`       | `-l`       | Retrieves logs from all pods matching the label selector.                                 | `kubectl logs -l app=nginx`            |
-
+For more info, available flags, and example commands, see [`logs` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs).
 
 ## `kubectl exec`
 
@@ -204,19 +165,10 @@ ff02::2 ip6-allrouters
 10.42.0.12 frontend-deployment-78b7999885-2sk6j
 ```
 
-Output explanation:
+Output explanation: The output depends on the command you execute once you enter the interactive session.
 
-The output depends on the command you execute once you enter the interactive session.
+For more info, available flags, and example commands, see [`exec` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#exec).
 
-### Flags for `kubectl exec`
-
-| Flag          | Short form | Description                                                           | Example                                            |
-| ------------- | ---------- | --------------------------------------------------------------------- | -------------------------------------------------- |
-| `--container` | `-c`       | Specifies a container name in a multi-container pod (required if >1). | `kubectl exec my-pod -c my-container -- /bin/bash` |
-| `--stdin`     | `-i`       | Keeps standard input open for the container (interactive sessions).   | `kubectl exec -i my-pod -- /bin/bash`              |
-| `--tty`       | `-t`       | Allocates a pseudo-terminal (pair with `-i` for interactive shells).  | `kubectl exec -t my-pod -- /bin/bash`              |
-| `--quiet`     | `-q`       | Suppresses kubectl’s own output; shows only the command’s output.     | `kubectl exec -q my-pod -- date`                   |
-| `--namespace` | `-n`       | Specifies the namespace of the target pod.                            | `kubectl exec -n my-namespace my-pod -- ls`        |
 
 ## `kubectl debug`
 
@@ -244,20 +196,7 @@ dr-xr-xr-x 8 root root 0 Sep  3 15:00 attr
 exit
 ```
 
-### Flags for `kubectl debug`
-
-| Flag                | Short form | Description                                                                                   | Example                                                       |
-| ------------------- | ---------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `--image`           |            | Specifies the container image to use for the debug container.                                 | `kubectl debug mypod --image=busybox`                         |
-| `--target`          |            | Targets an existing container; the debug container shares that container’s process namespace. | `kubectl debug mypod --image=busybox --target=main-app`       |
-| `--share-processes` |            | When used with `--copy-to`, enables process namespace sharing in the copied pod.              | `kubectl debug mypod --copy-to=my-debug --share-processes`    |
-| `--copy-to`         |            | Creates a copy of the specified pod with changes applied for debugging.                       | `kubectl debug mypod --copy-to=my-debug --image=debian`       |
-| `--container`       | `-c`       | Names the **debug** container to be created.                                                  | `kubectl debug mypod --container=my-debugger`                 |
-| `--tty`             | `-t`       | Allocates a pseudo-terminal (combine with `-i` for interactive shells).                       | `kubectl debug mypod -it`                                     |
-| `--stdin`           | `-i`       | Keeps standard input open (interactive mode).                                                 | `kubectl debug mypod -it`                                     |
-| `--profile`         |            | Applies a security profile for node debugging (e.g., `sysadmin` for elevated privileges).     | `kubectl debug node/mynode --image=ubuntu --profile=sysadmin` |
-| `--replace`         |            | With `--copy-to`, deletes the original pod after creating/debugging the copy.                 | `kubectl debug mypod --copy-to=my-debug --replace`            |
-| `node/<node-name>`  |            | Targets a **node** directly, creating a privileged debug pod scheduled to that node.          | `kubectl debug node/mynode --image=ubuntu`                    |
+For more information, see [kubectl debug](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#debug).
 
 ## References
 
