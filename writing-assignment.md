@@ -12,6 +12,7 @@ When debugging, we recommend this workflow:
 2. `kubectl describe pod`: Gives you a snapshot of a specific pod's current state and configuration.
 3. `kubectl logs`: Gives you the standard output (`stdout`) and standard error (`stderr`) streams from a container running a pod.
 4. `kubectl exec`: Lets you execute a command directly inside a running container with a K8s pod.
+5. `kubetl debug`: Creates a temporary debug container to a running pod for advanced troubleshooting when `exec` is insufficient.
 
 This section expands on `kubectl` commands used for debugging, how to use them, and what flags are available.
 
@@ -201,10 +202,7 @@ The output depends on the command you execute once you enter the interactive ses
 | `--quiet`     | `-q`       | Suppresses kubectl’s own output; shows only the command’s output.     | `kubectl exec -q my-pod -- date`                   |
 | `--namespace` | `-n`       | Specifies the namespace of the target pod.                            | `kubectl exec -n my-namespace my-pod -- ls`        |
 
-
-## Other commands
-
-### `kubectl debug`
+## `kubectl debug`
 
 kubectl debug offers multiple powerful debugging modes by creating new containers with enhanced capabilities:
 
@@ -245,8 +243,7 @@ exit
 | `--replace`         |            | With `--copy-to`, deletes the original pod after creating/debugging the copy.                 | `kubectl debug mypod --copy-to=my-debug --replace`            |
 | `node/<node-name>`  |            | Targets a **node** directly, creating a privileged debug pod scheduled to that node.          | `kubectl debug node/mynode --image=ubuntu`                    |
 
-
-# References
+## References
 
 - [Kubectl commands (Official Docs)](https://kubernetes.io/docs/reference/generated/kubectl/)kubectl-commands#-strong-getting-started-strong-
 - [Kubernetes Overview (Official Docs)](https://kubernetes.io/docs/concepts/overview/)
