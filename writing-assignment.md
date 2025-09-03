@@ -2,7 +2,23 @@
 
 `kubectl` is the command-line interface (CLI) tool used to interact with and manage Kubernetes (K8s) clusters. With `kubectl`, you can commmunicate with the K8s API server and execute commands against a K8s cluster to deploy applications, manage resources, or view logs.
 
-`kubectl` is an essential tool for debugging
+`kubectl` is also an essential tool for dianogosing and debugging issues with your applications. With `kubectl`, you can access and investigate pod status, configurations, and container logs. For advanced users, you can even attach new debugging containers to running workloads.
+
+This guide outlines the most common `kubectl` commands and a recommended workflow for effective troubleshooting.
+
+- [Debug Operations in Kubernetes](#debug-operations-in-kubernetes)
+  - [Recommended Debugging Workflow](#recommended-debugging-workflow)
+  - [`kubectl get pods`](#kubectl-get-pods)
+    - [Flags for `kubectl get pods`](#flags-for-kubectl-get-pods)
+  - [`kubectl describe pod`](#kubectl-describe-pod)
+    - [Flags for `kubectl describe pod`](#flags-for-kubectl-describe-pod)
+  - [`kubectl logs`](#kubectl-logs)
+    - [Flags for `kubectl logs`](#flags-for-kubectl-logs)
+  - [`kubectl exec`](#kubectl-exec)
+    - [Flags for `kubectl exec`](#flags-for-kubectl-exec)
+  - [`kubectl debug`](#kubectl-debug)
+    - [Flags for `kubectl debug`](#flags-for-kubectl-debug)
+  - [References](#references)
 
 ## Recommended Debugging Workflow
 
