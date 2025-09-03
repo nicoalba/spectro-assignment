@@ -2,17 +2,22 @@
 
 `kubectl` is the command-line interface (CLI) tool used to interact with and manage Kubernetes (K8s) clusters. With `kubectl`, you can commmunicate with the K8s API server and execute commands against a K8s cluster to deploy applications, manage resources, or view logs.
 
-`kubectl` is also an essential tool for dianogosing and debugging issues with your applications. With `kubectl`, you can access and investigate pod status, configurations, and container logs. For advanced users, you can even attach new debugging containers to running workloads.
+`kubectl` is also an essential tool for dianogosing and debugging issues with your applications. With `kubectl`, you can access and investigate pod status, configurations, and container logs. For advanced users, you can even attach temporary debugging containers to running workloads.
 
 This guide outlines the most common `kubectl` commands and a recommended workflow for effective troubleshooting.
 
 - [Debug Operations in Kubernetes](#debug-operations-in-kubernetes)
   - [Recommended Debugging Workflow](#recommended-debugging-workflow)
   - [`kubectl get pods`](#kubectl-get-pods)
+    - [Example output and explanation](#example-output-and-explanation)
   - [`kubectl describe pod`](#kubectl-describe-pod)
+    - [Example output and explanation](#example-output-and-explanation-1)
   - [`kubectl logs`](#kubectl-logs)
+    - [Example output and explanation](#example-output-and-explanation-2)
   - [`kubectl exec`](#kubectl-exec)
+    - [Example output and explanation](#example-output-and-explanation-3)
   - [`kubectl debug`](#kubectl-debug)
+    - [Example output and explanation](#example-output-and-explanation-4)
   - [References](#references)
 
 ## Recommended Debugging Workflow
@@ -25,19 +30,17 @@ When debugging, we recommend this workflow:
 4. `kubectl exec`: Lets you execute a command directly inside a running container with a K8s pod.
 5. `kubetl debug`: Creates a temporary debug container to a running pod for advanced troubleshooting when `exec` is insufficient.
 
-This section expands on `kubectl` commands used for debugging, how to use them, and what flags are available.
-
 ## `kubectl get pods`
 
-Use this command to get a list of all available pods in a given namespace. It lists their status, health, and age. This command is typically the first one executed for pod health checks.
+Use this command to get a list of all available pods in a given [namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/). It lists their status, health, and age. This command is typically the first one executed for pod health checks.
 
-The command will execute against your current context's namespace unless you specify a namespace with `--namespace`:
+The command executes against your current context's namespace unless you specify a namespace with `--namespace`:
 
 ```shell
 kubectl get pods --namespace
 ```
 
-Example output:
+### Example output and explanation
 
 ```shell
 $ kubectl get pods
@@ -47,21 +50,19 @@ mysql-76c74d896b-4g8b8                     1/1     Running            0         
 webapp-deployment-559d86b864-sk7r9         0/1     CrashLoopBackOff   4             2m
 ```
 
-Output explanation:
-
 - `NAME`: The name of the pod
-- `READY`: The number of ready containers / the number of total containers.
-- `STATUS`: Current state of the pod: `Running`, `Pending`, `Succeeded`, `Failed`, or `CrashLoopBadOff`.
-- `RESTARTS`: How many times the containers in the pod have restarted.
-- `AGE`: The amount of time elapsed since creation of the pod.
+- `READY`: The number of ready containers / the number of total containers
+- `STATUS`: Current state of the pod: `Running`, `Pending`, `Succeeded`, `Failed`, or `CrashLoopBadOff`
+- `RESTARTS`: How many times the containers in the pod have restarted
+- `AGE`: The amount of time elapsed since creation of the pod
 
 For more info, available flags, and example commands, see [`get` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get).
 
 ## `kubectl describe pod`
 
-The `kubectl describe pod` command provides a detailed, human-readable view of a specific pod. While `kubectl get pods` offers a summary, `describe` gathers information from multiple API endpoints to present a comprehensive snapshot of a pod's current state and configuration. It is an essential tool for troubleshooting pod-related issues.
+Use this command to get a detailed view of a specific pod or a set of pods in a K8s cluster. While `kubectl get pods` offers a summary, `describe` gathers information from multiple API endpoints to present a comprehensive snapshot of a pod's current state and configuration. It is an essential tool for troubleshooting pod-related issues.
 
-Example output:
+### Example output and explanation
 
 ```shell
 $ kubectl describe pod webapp-deployment-559d86b864-sk7r9
@@ -98,9 +99,7 @@ Events:
   Warning  BackOff    3m (x5 over 10m)     kubelet            Back-off pulling image "my-webapp:v2"
 ```
 
-Ouput explanation:
-
-For each container in the pod, this output lists important information:
+For each container in the pod, this output lists:
 
 - Metadata and status:
   - Name, Namespace, Labels
@@ -124,9 +123,9 @@ For more info, available flags, and example commands, see [`describe` on K8s doc
 
 ## `kubectl logs`
 
-This command is used to retrieve and display the standard output (`stdout`) and standard error (`stderr`) streams from a container running in a pod. While `kubectl get pods` tells you if a pod is healthy, `kubectl logs` gives you visibility into what the application inside the container is doing.
+Use this command to retrieve and display the standard output (`stdout`) and standard error (`stderr`) streams from a container running in a pod. While `kubectl get pods` tells you if a pod is healthy, `kubectl logs` gives you visibility into what the application inside the container is doing.
 
-Example output:
+### Example output and explanation
 
 ```shell
 $ kubectl logs frontend-deployment-78b7999885-2sk6j
@@ -150,9 +149,9 @@ For more info, available flags, and example commands, see [`logs` on K8s docs](h
 
 ## `kubectl exec`
 
-Use the `kubectl exec` command allows you to execute a command directly inside a running container within a pod. It provides interactive access to the container's shell and environment, which is powerful for live debugging and troubleshooting
+Use the `kubectl exec` command to execute a command directly inside a running container within a pod. It provides interactive access to the container's shell and environment, which is powerful for live debugging and troubleshooting.
 
-Example output:
+### Example output and explanation
 
 ```shell
 $ kubectl exec frontend-deployment-78b7999885-2sk6j -- cat /etc/hosts
@@ -165,22 +164,21 @@ ff02::2 ip6-allrouters
 10.42.0.12 frontend-deployment-78b7999885-2sk6j
 ```
 
-Output explanation: The output depends on the command you execute once you enter the interactive session.
+The output depends on the command you execute once you enter the interactive session.
 
 For more info, available flags, and example commands, see [`exec` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#exec).
 
-
 ## `kubectl debug`
 
-kubectl debug offers multiple powerful debugging modes by creating new containers with enhanced capabilities:
+Use this command for advanced troubleshooting, when all other methods have proven insufficient. These are the most common use cases:
 
-- Create an ephemeral container in a running pod: This is the most common use case. kubectl debug creates and adds a temporary, interactive container to an existing pod. This debug container can be based on a debug-optimized image (like busybox or nicolaka/netshoot) and can share the process namespace with the target container. This allows you to inspect the running processes and files of the original container without modifying or restarting it.
-- Copy and modify a pod: If ephemeral containers are not enabled in your cluster or you need to test a specific change, kubectl debug can create a copy of the pod. This new pod can have its image or other attributes changed for testing, and a debug container is added. It's an isolated way to test a fix without affecting the live workload.
-- Debug a cluster node: kubectl debug can create a new pod that runs directly on a specific node, mounting the host's filesystem at /host. This effectively provides a "live SSH-like" shell on the node itself, allowing you to troubleshoot node-level issues like networking problems, log analysis, or filesystem issues.
+- **Create an ephemeral (temporary) container in a running pod**: `kubectl debug` creates and adds a temporary, interactive container to an existing pod that lets you inspect the running processes and files of the original container without modifying or restarting it.
+- **Copy and modify a pod**: If ephemeral containers are not enabled in your cluster or you need to test a specific change, `kubectl debug` can create a copy of the pod. You can then add a debugging container to the pod copy for testing. It's an isolated way to test a fix without affecting the live workload.
+- **Debug a cluster node**: `kubectl debug` can create a new pod that runs directly on a specific node, mounting the host's filesystem at `/host`. This creates an SSH-like shell on the node itself, letting you troubleshoot node-level issues like networking problems, log analysis, or filesystem issues without a true SSH connection.
 
-The output of kubectl debug is not fixed, as it depends on the debugging mode you use. The most common use case is adding an interactive ephemeral container to a running pod
+### Example output and explanation
 
-Example output:
+The output of `kubectl debug` depends on the debugging mode you use. The most common use case is adding an interactive ephemeral container to a running pod:
 
 ```
 $ kubectl debug -it mypod --image=busybox --target=main-app
