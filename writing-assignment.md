@@ -51,7 +51,7 @@ kubectl config set-context --current --namespace <namespace>
 
 ### Example output and explanation
 
-```shell
+```text
 $ kubectl get pods
 NAME                                       READY   STATUS             RESTARTS      AGE
 frontend-deployment-78b7999885-2sk6j       1/1     Running            0             13m
@@ -69,63 +69,47 @@ For more info, available flags, and example commands, see [`get` on K8s docs](ht
 
 ## `kubectl describe pod`
 
-Use this command to get a detailed view of a specific pod or a set of pods in a K8s cluster. While `kubectl get pods` offers a summary, `describe` gathers information from multiple API endpoints to present a comprehensive snapshot of a pod's current state and configuration. It is an essential tool for troubleshooting pod-related issues.
+Use this command to get a detailed, human-readable view of a specific pod or a set of pods in a K8s cluster. While `kubectl get pods` offers a summary, `describe` gathers information from multiple API endpoints to present a comprehensive snapshot of a pod's current state and configuration. It is an essential tool for troubleshooting pod-related issues.
 
 ### Example output and explanation
 
-```shell
-$ kubectl describe pod webapp-deployment-559d86b864-sk7r9
-Name:             webapp-deployment-559d86b864-sk7r9
-Namespace:        default
-Priority:         0
-Node:             k8s-worker-2/10.128.0.12
-Start Time:       Wed, 03 Sep 2025 13:20:45 +0000
-Labels:           app=webapp
-                  pod-template-hash=559d86b864
-Status:           Running
-IP:               10.42.0.14
+```text
+Name:             api
+Namespace:        prod
+Node:             ip-10-0-2-11/10.0.2.11
+Start Time:       Tue, 03 Sep 2025 10:07:11 -0600
+Labels:           app=api
+Status:           Pending
+IP:               <none>
 Containers:
-  webapp:
-    Container ID:   containerd://a1b2c3d4e5f6g7h8i9j0
-    Image:          my-webapp:v2
-    Image ID:
-    Port:           <none>
-    Host Port:      <none>
-    State:          Waiting
-      Reason:       CrashLoopBackOff
-    Last State:     Terminated
-      Reason:       ContainerCreating
-      Exit Code:    1
-    Ready:          False
-    Restart Count:  5
-    ...
+  api:
+    Image:        registry.example.com/team/api:2.0.0
+    State:        Waiting
+      Reason:     ImagePullBackOff
+    Ready:        False
+    Restart Count: 0
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             False
+  ContainersReady   False
+  PodScheduled      True
 Events:
-  Type     Reason     Age                  From               Message
-  ----     ------     ----                 ----               -------
-  Normal   Scheduled  12m                  default-scheduler  Successfully assigned default/webapp-deployment-559d86b864-sk7r9 to k8s-worker-2
-  Normal   Pulling    5m (x3 over 11m)     kubelet            Pulling image "my-webapp:v2"
-  Warning  Failed     5m (x3 over 11m)     kubelet            Failed to pull image "my-webapp:v2": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/my-webapp:v2": no matching manifest for linux/amd64 in the manifest list entries
-  Warning  BackOff    3m (x5 over 10m)     kubelet            Back-off pulling image "my-webapp:v2"
+  Type     Reason          Age                 From     Message
+  ----     ------          ----                ----     -------
+  Normal   Pulling         3m                  kubelet  Pulling image "registry.example.com/team/api:2.0.0"
+  Warning  Failed          3m                  kubelet  Failed to pull image "registry.example.com/team/api:2.0.0": rpc error: ...
+  Warning  Failed          3m                  kubelet  Error: ErrImagePull
+  Warning  BackOff         2m (x3 over 3m)     kubelet  Back-off pulling image "registry.example.com/team/api:2.0.0"
+  Warning  Failed          2m                  kubelet  Error: ImagePullBackOff
 ```
 
-For each container in the pod, this output lists:
+The image can't be pulled. Verify:
 
-- Metadata and status:
-  - Name, Namespace, Labels
-  - Node: The specific worker node
-  - Status: The pod's current state
-  - IP: The pod's internal IP address
-- Containers:
-  - Image: The container image being used
-  - State: The current state of the container
-  - Ready: If the container is ready to serve traffic
-  - Restart count: How many times the container has been restarted
-  - Resource requests/limits: CPU and memory resources requested and limited for the container
-- Volumes:
-  - ConfigMaps, Secrets, Persistent Volumes
-- Events:
-  - Normal events
-  - Warning events
+- Image name/tag exists and is spelled correctly
+- Registry credentials/Secret on the ServiceAccount
+- Network/DNS to the registry
+- If private registry via Palette, ensure the pack/secret is applied to this cluster/namespace
 
 For more info, available flags, and example commands, see [`describe` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#describe).
 
@@ -136,7 +120,7 @@ Use this command to retrieve and display the standard output (`stdout`) and stan
 
 ### Example output and explanation
 
-```shell
+```text
 $ kubectl logs frontend-deployment-78b7999885-2sk6j
 /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
 /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
@@ -162,7 +146,7 @@ Use the `kubectl exec` command to execute a command directly inside a running co
 
 ### Example output and explanation
 
-```shell
+```text
 $ kubectl exec frontend-deployment-78b7999885-2sk6j -- cat /etc/hosts
 127.0.0.1       localhost
 ::1     localhost ip6-localhost ip6-loopback
@@ -189,7 +173,7 @@ Use this command for advanced troubleshooting, when all other methods have prove
 
 The output of `kubectl debug` depends on the debugging mode you use. The most common use case is adding an interactive ephemeral container to a running pod:
 
-```
+```text
 $ kubectl debug -it mypod --image=busybox --target=main-app
 Defaulting debug container name to debugger-d4fsh.
 If you don't see a command prompt, try pressing enter.
