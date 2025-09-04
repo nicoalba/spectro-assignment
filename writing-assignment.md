@@ -194,7 +194,7 @@ dr-xr-xr-x 8 root root 0 Sep  3 15:00 attr
 exit
 ```
 
-For more information, refer to [kubectl debug](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#debug).
+For more info, available flags, and example commands, refer to [kubectl debug](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#debug).
 
 ## References
 
