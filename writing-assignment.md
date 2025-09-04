@@ -105,7 +105,7 @@ Events:
   Warning  Failed          2m                  kubelet  Error: ImagePullBackOff
 ```
 
-The image can't be pulled. Verify:
+In this example, the image can't be pulled. Things you would verify:
 
 - Image name/tag exists and is spelled correctly
 - Registry credentials/Secret on the ServiceAccount
