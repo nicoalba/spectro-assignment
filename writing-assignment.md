@@ -198,6 +198,6 @@ For more information, refer to [kubectl debug](https://kubernetes.io/docs/refere
 
 ## References
 
-- [Spectro Cloud Palette Docs](https://docs.spectrocloud.com/)
-- [Kubectl commands (Official Docs)](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
-- [Kubernetes Overview (Official Docs)](https://kubernetes.io/docs/concepts/overview/)
+- [Spectro Cloud Palette docs](https://docs.spectrocloud.com/)
+- [Kubectl commands (official docs)](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
+- [Kubernetes Overview (official docs)](https://kubernetes.io/docs/concepts/overview/)
