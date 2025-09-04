@@ -8,20 +8,6 @@ In Spectro Cloud's Palette, you can use these `kubectl` commands alongside the P
 
 This guide outlines the most common `kubectl` commands and a recommended workflow for effective troubleshooting.
 
-- [Debug Operations in Kubernetes](#debug-operations-in-kubernetes)
-  - [Recommended Debugging Workflow](#recommended-debugging-workflow)
-  - [`kubectl get pods`](#kubectl-get-pods)
-    - [Example output and explanation](#example-output-and-explanation)
-  - [`kubectl describe pod`](#kubectl-describe-pod)
-    - [Example output and explanation](#example-output-and-explanation-1)
-  - [`kubectl logs`](#kubectl-logs)
-    - [Example output and explanation](#example-output-and-explanation-2)
-  - [`kubectl exec`](#kubectl-exec)
-    - [Example output and explanation](#example-output-and-explanation-3)
-  - [`kubectl debug`](#kubectl-debug)
-    - [Example output and explanation](#example-output-and-explanation-4)
-  - [References](#references)
-
 ## Recommended Debugging Workflow
 
 When debugging, we recommend this workflow:
