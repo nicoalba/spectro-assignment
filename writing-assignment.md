@@ -34,13 +34,13 @@ When debugging, we recommend this workflow:
 6. `kubectl debug`: Creates a temporary debug container to a running pod for advanced troubleshooting when `exec` is insufficient.
 
 ```mermaid
-graph TD
-    A[Start Debugging] --> B[Monitor with Palette Dashboard]
-    B --> C[List Pods with kubectl get pods]
-    C --> D[Inspect Pod with kubectl describe]
-    D --> E[View Logs with kubectl logs]
-    E --> F[Access Container with kubectl exec]
-    F --> G[Debug Pod with kubectl debug]
+graph LR
+    A[Start] --> B[Monitor with Palette]
+    B --> C[List Pods]
+    C --> D[Inspect Pod]
+    D --> E[View Logs]
+    E --> F[Access Container]
+    F --> G[Debug Pod]
 ```
 
 ## `kubectl get pods`
