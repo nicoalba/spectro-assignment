@@ -1,8 +1,10 @@
 # Debug Operations in Kubernetes
 
-`kubectl` is the command-line interface (CLI) tool used to interact with and manage Kubernetes (K8s) clusters. With `kubectl`, you can communicate with the K8s API server and execute commands against a K8s cluster to deploy applications, manage resources, or view logs.
+`kubectl` is the command-line interface (CLI) tool used to interact with and manage Kubernetes (K8s) clusters. It lets you communicate with the K8s API server and execute commands against a K8s cluster to deploy applications, manage resources, or view logs.
 
 `kubectl` is also an essential tool for diagnosing and debugging issues with your applications. With `kubectl`, you can access and investigate pod status, configurations, and container logs. For advanced users, you can even attach temporary debugging containers to running workloads.
+
+In Spectro Cloud's Palette, you can use these `kubectl` commands alongside the Palette UI or CLI to troubleshoot clusters managed across cloud, on-premises, or hybrid environments. Palette's dashboard provides visual insights into pod health, which you can complement with `kubectl` for comprehensive debugging.
 
 This guide outlines the most common `kubectl` commands and a recommended workflow for effective troubleshooting.
 
@@ -24,15 +26,24 @@ This guide outlines the most common `kubectl` commands and a recommended workflo
 
 When debugging, we recommend this workflow:
 
-1. `kubectl get pods`: Gives you an inventory of the pods in your K8s cluster.
-2. `kubectl describe pod`: Gives you a snapshot of a specific pod's current state and configuration.
-3. `kubectl logs`: Gives you the standard output (`stdout`) and standard error (`stderr`) streams from a container running a pod.
-4. `kubectl exec`: Lets you execute a command directly inside a running container in a pod.
-5. `kubectl debug`: Creates a temporary debug container to a running pod for advanced troubleshooting when `exec` is insufficient.
+1. Use Palette's cluster dashboard to monitor pod metrics and alerts in real time, then apply these `kubectl` commands for deeper investigation.
+2. `kubectl get pods`: Gives you an inventory of the pods in your K8s cluster.
+3. `kubectl describe pod`: Gives you a snapshot of a specific pod's current state and configuration.
+4. `kubectl logs`: Gives you the standard output (`stdout`) and standard error (`stderr`) streams from a container running a pod.
+5. `kubectl exec`: Lets you execute a command directly inside a running container in a pod.
+6. `kubectl debug`: Creates a temporary debug container to a running pod for advanced troubleshooting when `exec` is insufficient.
+
+graph TD
+    A[Start Debugging] --> B[Monitor with Palette Dashboard]
+    B --> C[List Pods with kubectl get pods]
+    C --> D[Inspect Pod with kubectl describe]
+    D --> E[View Logs with kubectl logs]
+    E --> F[Access Container with kubectl exec]
+    F --> G[Debug Pod with kubectl debug]
 
 ## `kubectl get pods`
 
-Use this command to get a list of pods in a given [namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/). It lists their status, health, and age. Run this command first to check pod health.
+Use this command to get a list of pods in a given [namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/). It lists their status, health, and age. Execute this command first to check pod health.
 
 The command executes against your current context's namespace unless you specify a namespace with `--namespace` (or, simply `-n`):
 
@@ -48,6 +59,8 @@ To set a working namespace, so you don't need to repeat it everywhere:
 ```shell
 kubectl config set-context --current --namespace <namespace>
 ```
+
+In Palette, you can view a similar pod inventory in the cluster overview dashboard, which highlights health and status alongside `kubectl get pods` output.
 
 ### Example output and explanation
 
@@ -109,7 +122,7 @@ The image can't be pulled. Verify:
 - Image name/tag exists and is spelled correctly
 - Registry credentials/Secret on the ServiceAccount
 - Network/DNS to the registry
-- If private registry via Palette, ensure the pack/secret is applied to this cluster/namespace
+- If using Palette to manage this cluster, verify the registry pack is correctly configured in the cluster profile
 
 For more info, available flags, and example commands, refer to [`describe` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#describe).
 
@@ -133,10 +146,12 @@ $ kubectl logs frontend-deployment-78b7999885-2sk6j
 10.42.0.1 - - [03/Sep/2025:13:20:50 +0000] "GET / HTTP/1.1" 200 612 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" "-"
 ```
 
-The logs show the raw output of what your application is doing inside the container. You'll typically see:
+The logs show the raw output of what your application is doing inside the container. You'll typically get:
 
 - Startup and system messages: Initialization messages, system and informational output, warnings and errors
 - Runtime logs: Application-specific data, error stack traces and exceptions, debugging output
+
+With Palette, you can access centralized logs for your cluster in the UI, complementing `kubectl logs` for quick application-level debugging.
 
 For more info, available flags, and example commands, refer to [`logs` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs).
 
@@ -159,6 +174,8 @@ ff02::2 ip6-allrouters
 
 The output depends on the command you execute once you enter the interactive session.
 
+When using Palette, ensure your user role has permissions to execute commands in containers, as defined in the cluster's security policies.
+
 For more info, available flags, and example commands, refer to [`exec` on K8s docs](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#exec).
 
 ## `kubectl debug`
@@ -168,6 +185,8 @@ Use this command for advanced troubleshooting, when all other methods have prove
 - **Create an ephemeral (temporary) container in a running pod**: `kubectl debug` creates and adds a temporary, interactive container to an existing pod that lets you inspect the running processes and files of the original container without modifying or restarting it.
 - **Copy and modify a pod**: If ephemeral containers are not enabled in your cluster or you need to test a specific change, `kubectl debug` can create a copy of the pod. You can then add a debugging container to the pod copy for testing. It's an isolated way to test a fix without affecting the live workload.
 - **Debug a cluster node**: `kubectl debug` can create a new pod that runs directly on a specific node, mounting the host's filesystem at `/host`. This creates an SSH-like shell on the node itself, letting you troubleshoot node-level issues like networking problems, log analysis, or filesystem issues without a true SSH connection.
+
+In Palette-managed clusters, you can use the UI to inspect node health alongside `kubectl debug` for node-level troubleshooting, like checking system logs or network configurations.
 
 ### Example output and explanation
 
@@ -191,5 +210,6 @@ For more information, refer to [kubectl debug](https://kubernetes.io/docs/refere
 
 ## References
 
+- [Spectro Cloud Palette Docs](https://docs.spectrocloud.com/)
 - [Kubectl commands (Official Docs)](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
 - [Kubernetes Overview (Official Docs)](https://kubernetes.io/docs/concepts/overview/)
